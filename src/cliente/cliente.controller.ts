@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  Inject,
+  Query,
 } from '@nestjs/common';
 import { ClienteService } from './cliente.service';
 import { CreateClienteDto } from './dto/create-cliente.dto';
@@ -13,7 +15,7 @@ import { UpdateClienteDto } from './dto/update-cliente.dto';
 
 @Controller('cliente')
 export class ClienteController {
-  constructor(private readonly clienteService: ClienteService) {}
+  constructor(@Inject() private readonly clienteService: ClienteService) {}
 
   @Post()
   create(@Body() createClienteDto: CreateClienteDto) {
@@ -21,8 +23,8 @@ export class ClienteController {
   }
 
   @Get()
-  findAll() {
-    return this.clienteService.findAll();
+  findAll(@Query('telefone') telefone: string, @Query('nome') nome: string) {
+    return this.clienteService.findByCellphoneOrName(telefone, nome);
   }
 
   @Get(':id')
